@@ -1,4 +1,4 @@
-package com.example.moviebrowser
+package com.example.bookbrowser
 
 import org.junit.Test
 

@@ -1,4 +1,4 @@
-package com.example.moviebrowser.ui.theme
+package com.example.bookbrowser.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.moviebrowser'
+    namespace 'com.example.bookbrowser'
     compileSdk rootProject.ext.compileSdkVersion
 
     defaultConfig {
-        applicationId "com.example.moviebrowser"
+        applicationId "com.example.bookbrowser"
         minSdk rootProject.ext.minSdkVersion
         targetSdk rootProject.ext.targetSdkVersion
         versionCode 1
@@ -43,13 +43,21 @@ dependencies {
     implementation "androidx.core:core-ktx:${rootProject.ext.coreKtxVersion}"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:${rootProject.ext.lifecycleVersion}"
     implementation "androidx.activity:activity-compose:${rootProject.ext.activityComposeVersion}"
-
+    // Jetpack Compose
     implementation platform("androidx.compose:compose-bom:${rootProject.ext.composeBomVersion}")
     implementation 'androidx.compose.ui:ui'
     implementation 'androidx.compose.ui:ui-graphics'
     implementation 'androidx.compose.ui:ui-tooling-preview'
     implementation 'androidx.compose.material3:material3'
-    
+    // Navigation
+    implementation "androidx.navigation:navigation-compose:${rootProject.ext.navigationVersion}"
+    // Retrofit
+    implementation "com.squareup.retrofit2:retrofit:${rootProject.ext.retrofitVersion}"
+    implementation "com.squareup.retrofit2:converter-gson:${rootProject.ext.retrofitVersion}"
+    implementation "com.squareup.okhttp3:okhttp:${rootProject.ext.okhttpVersion}"
+    // Coil
+    implementation "io.coil-kt:coil-compose:${rootProject.ext.coilVersion}"
+
     testImplementation "junit:junit:${rootProject.ext.junitVersion}"
     androidTestImplementation "androidx.test.ext:junit:${rootProject.ext.junitExtVersion}"
     androidTestImplementation "androidx.test.espresso:espresso-core:${rootProject.ext.espressoVersion}"
