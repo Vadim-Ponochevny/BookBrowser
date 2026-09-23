@@ -25,6 +25,7 @@ fun BookListScreen(
 ) {
     val books by viewModel.books
     val isLoading by viewModel.isLoading
+    val error by viewModel.error
 
     Scaffold(
         topBar = {
@@ -38,6 +39,16 @@ fun BookListScreen(
         ) {
             if (isLoading) {
                 LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+            }
+
+            error?.let { message ->
+                Text(message, modifier = Modifier.padding(16.dp))
+                Button(onClick = viewModel::loadBooks, enabled = !isLoading) {
+                    Text("Retry")
+                }
+            }
+            if (!isLoading && error == null && books.isEmpty()) {
+                Text("No books found.", modifier = Modifier.padding(16.dp))
             }
 
             LazyColumn(modifier = Modifier.fillMaxSize()) {
@@ -63,7 +74,7 @@ fun BookCard(
     ) {
         Row(modifier = Modifier.padding(12.dp)) {
             AsyncImage(
-                model = book.volumeInfo.imageLinks?.thumbnail?.replace("http://", "https://"),
+                model = book.coverUrl,
                 contentDescription = null,
                 modifier = Modifier
                     .size(width = 70.dp, height = 100.dp)
@@ -73,13 +84,13 @@ fun BookCard(
 
             Column(modifier = Modifier.padding(start = 12.dp)) {
                 Text(
-                    text = book.volumeInfo.title,
+                    text = book.title,
                     style = MaterialTheme.typography.titleSmall,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
 
-                val authors = book.volumeInfo.authors?.joinToString(", ") ?: "Unknown Author"
+                val authors = book.authors.takeIf { it.isNotEmpty() }?.joinToString(", ") ?: "Unknown Author"
                 Text(
                     text = authors,
                     style = MaterialTheme.typography.bodySmall,

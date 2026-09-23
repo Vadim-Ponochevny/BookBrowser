@@ -35,6 +35,7 @@ fun BookDetailsScreen(
 
     val book by viewModel.book.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
+    val error by viewModel.error.collectAsState()
 
     Scaffold(
         topBar = {
@@ -55,6 +56,13 @@ fun BookDetailsScreen(
         ) {
             if (isLoading) {
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+            } else if (error != null) {
+                Column(modifier = Modifier.align(Alignment.Center).padding(16.dp)) {
+                    Text(error.orEmpty())
+                    Button(onClick = { bookId?.let(viewModel::loadBookDetails) }) {
+                        Text("Retry")
+                    }
+                }
             } else {
                 book?.let { currentBook ->
                     Column(
@@ -69,7 +77,7 @@ fun BookDetailsScreen(
                             shape = RoundedCornerShape(12.dp)
                         ) {
                             AsyncImage(
-                                model = currentBook.volumeInfo.imageLinks?.thumbnail?.replace("http://", "https://"),
+                                model = currentBook.coverUrl,
                                 contentDescription = null,
                                 modifier = Modifier
                                     .height(280.dp)
@@ -81,13 +89,13 @@ fun BookDetailsScreen(
                         Spacer(modifier = Modifier.height(24.dp))
 
                         Text(
-                            text = currentBook.volumeInfo.title,
+                            text = currentBook.title,
                             style = MaterialTheme.typography.headlineSmall,
                             textAlign = TextAlign.Center,
                             fontWeight = FontWeight.Bold
                         )
 
-                        val authors = currentBook.volumeInfo.authors?.joinToString(", ") ?: "The author is not specified"
+                        val authors = currentBook.authors.takeIf { it.isNotEmpty() }?.joinToString(", ") ?: "The author is not specified"
                         Text(
                             text = authors,
                             style = MaterialTheme.typography.titleMedium,
@@ -95,7 +103,7 @@ fun BookDetailsScreen(
                             modifier = Modifier.padding(top = 8.dp)
                         )
 
-                        currentBook.volumeInfo.averageRating?.let { rating ->
+                        currentBook.averageRating?.let { rating ->
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
                                 modifier = Modifier.padding(top = 8.dp)
@@ -119,7 +127,7 @@ fun BookDetailsScreen(
 
                         Spacer(modifier = Modifier.height(8.dp))
 
-                        val description = currentBook.volumeInfo.description?.removeHtmlTags()
+                        val description = currentBook.description?.removeHtmlTags()
                             ?: "There is no description for this book."
 
                         Text(
