@@ -13,5 +13,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "MovieBrowser"
+rootProject.name = "BookBrowser"
 include ':app'
