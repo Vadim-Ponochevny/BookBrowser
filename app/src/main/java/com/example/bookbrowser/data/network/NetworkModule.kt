@@ -8,6 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
+import java.util.concurrent.TimeUnit
 
 interface BookApi {
     @GET("search.json")
@@ -27,7 +28,7 @@ object NetworkModule {
     val api: BookApi by lazy {
         Retrofit.Builder()
             .baseUrl(BASE_URL)
-            .client(OkHttpClient.Builder().addInterceptor { chain ->
+            .client(OkHttpClient.Builder().callTimeout(1, TimeUnit.MINUTES).addInterceptor { chain ->
                 chain.proceed(chain.request().newBuilder()
                     .header("User-Agent", "BookBrowser/1.0 (Android)")
                     .build())
